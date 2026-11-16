@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.tmp-verify/
+.DS_Store
+Thumbs.db
+*.log
+
+# Duplicate source mesh; the site uses public/models/shoe.glb
+Meshy_AI_Nike_Alphafly_3_Runni_0825204523_texture.glb

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f5f3" />
+    <title>VELOCITY // Built For Speed — Elite Racing System</title>
+    <meta
+      name="description"
+      content="An interactive launch experience for an elite carbon-plated marathon racing shoe. Engineered for speed."
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400..900;1,400..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ============ LOADER ============ -->
+    <div class="loader" id="loader" aria-hidden="true">
+      <div class="loader__inner">
+        <div class="loader__grid"></div>
+        <div class="loader__top">
+          <span class="loader__tag">RUN//01</span>
+          <span class="loader__tag loader__tag--right">PERFORMANCE&nbsp;LAB</span>
+        </div>
+        <div class="loader__center">
+          <h1 class="loader__title">
+            <span>RACE&nbsp;SYSTEM</span>
+            <span class="loader__title--sub">LOADING</span>
+          </h1>
+          <div class="loader__bar">
+            <div class="loader__bar-fill" id="loaderBarFill"></div>
+          </div>
+          <div class="loader__meta">
+            <span class="loader__pct" id="loaderPct">00%</span>
+            <span class="loader__stat" id="loaderStat">3D PERFORMANCE MODEL</span>
+          </div>
+        </div>
+        <div class="loader__bottom">
+          <span>CARBON SYSTEM</span>
+          <span>AERO GEOMETRY</span>
+          <span>READY</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ HEADER ============ -->
+    <header class="header" id="header">
+      <div class="header__left">
+        <span class="header__mark">RUN//01</span>
+        <span class="header__sub">PERFORMANCE&nbsp;LAB</span>
+      </div>
+      <nav class="header__nav" id="headerNav">
+        <a href="#chapter-speed">Technology</a>
+        <a href="#chapter-energy">Performance</a>
+        <a href="#chapter-engineering">Design</a>
+        <a href="#chapter-raceday">Specs</a>
+      </nav>
+      <div class="header__cta">
+        <a href="#chapter-raceday" class="btn btn--ghost">EXPLORE</a>
+        <a href="#chapter-raceday" class="btn btn--solid">SHOP</a>
+      </div>
+    </header>
+
+    <!-- ============ FIXED 3D CANVAS ============ -->
+    <div class="canvas-wrap" id="canvasWrap"></div>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main" id="main">
+      <!-- ---------- HERO ---------- -->
+      <section class="hero" id="hero">
+        <div class="hero__bg" aria-hidden="true">
+          <span class="glow glow--a"></span>
+          <span class="glow glow--b"></span>
+          <span class="glow glow--white"></span>
+          <span class="grid-lines"></span>
+        </div>
+
+        <div class="hero__inner">
+          <!-- Invisible target the 3D shoe is projected onto — centered in the hero -->
+          <span class="hero__shoe-slot" id="heroShoeSlot" aria-hidden="true"></span>
+
+          <div class="hero__typo">
+            <div class="hero__line hero__line--1">
+              <span class="hero__word">BUILT</span>
+            </div>
+            <div class="hero__line hero__line--2">
+              <span class="hero__word hero__word--behind">FOR</span>
+            </div>
+            <div class="hero__line hero__line--3">
+              <span class="hero__word hero__word--front">SPEED<span class="hero__dot">.</span></span>
+            </div>
+          </div>
+
+          <div class="hero__copy">
+            <p class="hero__lede">
+              ELITE RACE-DAY PERFORMANCE.<br />ENGINEERED FOR SPEED.
+            </p>
+            <div class="hero__scroll">
+              <span class="hero__scroll-line"></span>
+              <span>SCROLL TO IGNITE</span>
+            </div>
+          </div>
+
+          <!-- Technical annotation labels around the shoe -->
+          <div class="annotations" aria-hidden="true">
+            <span class="anno anno--carbon"><i class="anno__dot"></i>CARBON PLATE</span>
+            <span class="anno anno--energy"><i class="anno__dot"></i>MAX ENERGY RETURN</span>
+            <span class="anno anno--foam"><i class="anno__dot"></i>RACE FOAM</span>
+            <span class="anno anno--air"><i class="anno__dot"></i>AIR SYSTEM</span>
+            <span class="anno anno--light"><i class="anno__dot"></i>ULTRA LIGHT</span>
+            <span class="anno anno--drop"><i class="anno__dot"></i>8 MM DROP</span>
+            <svg class="anno__svg" viewBox="0 0 1000 700" preserveAspectRatio="none">
+              <path class="anno__path" d="M180 250 L430 330" />
+              <path class="anno__path" d="M820 220 L570 310" />
+              <path class="anno__path" d="M200 520 L430 420" />
+              <path class="anno__path" d="M810 520 L570 430" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="hero__ticker" aria-hidden="true">
+          <div class="ticker__track">
+            <span>ELITE MARATHON RACING</span><span class="ticker__dot">✦</span>
+            <span>CARBON PROPULSION</span><span class="ticker__dot">✦</span>
+            <span>MAXIMUM ENERGY RETURN</span><span class="ticker__dot">✦</span>
+            <span>AERODYNAMIC ENGINEERING</span><span class="ticker__dot">✦</span>
+            <span>ELITE MARATHON RACING</span><span class="ticker__dot">✦</span>
+            <span>CARBON PROPULSION</span><span class="ticker__dot">✦</span>
+            <span>MAXIMUM ENERGY RETURN</span><span class="ticker__dot">✦</span>
+            <span>AERODYNAMIC ENGINEERING</span><span class="ticker__dot">✦</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- PRODUCT STORY ---------- -->
+      <div class="product-story" id="productStory">
+        <!-- ===== CHAPTER 01 — SPEED ===== -->
+        <section class="chapter chapter--speed" id="chapter-speed">
+          <span class="chapter__ghost">01</span>
+          <div class="chapter__grid">
+            <div class="chapter__col chapter__col--left reveal-group">
+              <span class="chapter__kicker">CHAPTER 01 — SPEED</span>
+              <h2 class="chapter__title reveal">
+                BUILT TO<br />BREAK<br />AWAY.
+              </h2>
+              <p class="chapter__body reveal">
+                Every gram removed. Every curve tuned for propulsion. The
+                silhouette is built to punch through air and hold pace when the
+                race turns brutal.
+              </p>
+              <div class="speedlines" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+
+            <div class="chapter__col chapter__col--center">
+              <div class="stage-window" aria-hidden="true">
+                <span class="stage-window__label">SIDE PROFILE</span>
+                <span class="stage-window__coord">X 0.00 · Y -0.15 · Z 7.00</span>
+              </div>
+            </div>
+
+            <div class="chapter__col chapter__col--right reveal-group">
+              <div class="metric reveal">
+                <span class="metric__label">TOP SPEED SPLIT</span>
+                <span class="metric__value">2:41<span>/KM</span></span>
+              </div>
+              <div class="metric reveal">
+                <span class="metric__label">STACK HEIGHT</span>
+                <span class="metric__value">40<span>MM</span></span>
+              </div>
+              <div class="floating-label floating-label--a reveal">PROPULSION+</div>
+              <div class="floating-label floating-label--b reveal">AERO 001</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== CHAPTER 02 — ENERGY ===== -->
+        <section class="chapter chapter--energy" id="chapter-energy">
+          <span class="chapter__ghost">02</span>
+          <div class="chapter__grid">
+            <div class="chapter__col chapter__col--left reveal-group">
+              <span class="chapter__kicker">CHAPTER 02 — ENERGY</span>
+              <h2 class="chapter__title reveal">
+                EVERY<br />STRIDE<br />RETURNS<br />MORE.
+              </h2>
+              <p class="chapter__body reveal">
+                A supercritical race foam stores and releases energy on every
+                footstrike — turning impact into forward momentum for kilometre
+                after kilometre.
+              </p>
+            </div>
+
+            <div class="chapter__col chapter__col--center">
+              <div class="stage-window" aria-hidden="true">
+                <span class="stage-window__label">FOAM SYSTEM</span>
+                <span class="stage-window__coord">ENERGY RETURN · 89%</span>
+              </div>
+              <div class="callouts" aria-hidden="true">
+                <span class="callout callout--tl">ENERGY RETURN</span>
+                <span class="callout callout--tr">RESPONSIVE FOAM</span>
+                <span class="callout callout--bl">IMPACT ABSORPTION</span>
+                <span class="callout callout--br">PROPULSION</span>
+              </div>
+            </div>
+
+            <div class="chapter__col chapter__col--right reveal-group">
+              <div class="card reveal">
+                <span class="card__label">ENERGY RETURN</span>
+                <span class="card__value">MAXIMUM</span>
+                <span class="card__bar"><i style="--w:89%"></i></span>
+              </div>
+              <div class="card reveal">
+                <span class="card__label">RESPONSE</span>
+                <span class="card__value">INSTANT</span>
+                <span class="card__bar"><i style="--w:94%"></i></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== SPEED MOMENT ===== -->
+        <section class="speed-moment" id="speedMoment" aria-hidden="true">
+          <div class="speed-moment__streaks">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <h3 class="speed-moment__word">ACCELERATE</h3>
+        </section>
+
+        <!-- ===== CHAPTER 03 — ENGINEERING ===== -->
+        <section class="chapter chapter--engineering" id="chapter-engineering">
+          <span class="chapter__ghost">03</span>
+          <div class="chapter__grid">
+            <div class="chapter__col chapter__col--left reveal-group">
+              <span class="chapter__kicker">CHAPTER 03 — ENGINEERING</span>
+              <h2 class="chapter__title reveal">
+                ENGINEERED<br />BY<br />MILLIMETERS.
+              </h2>
+              <p class="chapter__body reveal">
+                Five systems, one line. Upper, foam, plate, air and outsole are
+                tuned in fractions of a millimetre to move as a single machine.
+              </p>
+            </div>
+
+            <div class="chapter__col chapter__col--center">
+              <div class="exploded" aria-hidden="true">
+                <svg class="exploded__svg" viewBox="0 0 600 620" preserveAspectRatio="xMidYMid meet">
+                  <path class="exploded__path" d="M120 90 L300 150" />
+                  <path class="exploded__path" d="M480 200 L320 240" />
+                  <path class="exploded__path" d="M110 330 L300 330" />
+                  <path class="exploded__path" d="M490 430 L320 400" />
+                  <path class="exploded__path" d="M130 540 L300 470" />
+                </svg>
+                <span class="exploded__label exploded__label--1">UPPER — TECH MESH</span>
+                <span class="exploded__label exploded__label--2">RACE FOAM</span>
+                <span class="exploded__label exploded__label--3">CARBON PLATE</span>
+                <span class="exploded__label exploded__label--4">AIR / ENERGY SYSTEM</span>
+                <span class="exploded__label exploded__label--5">RACE OUTSOLE</span>
+              </div>
+            </div>
+
+            <div class="chapter__col chapter__col--right reveal-group">
+              <div class="stamp reveal" aria-hidden="true">
+                <svg viewBox="0 0 120 120">
+                  <defs>
+                    <path id="circlePath" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+                  </defs>
+                  <text>
+                    <textPath href="#circlePath">
+                      PERFORMANCE LAB · CARBON SYSTEM · RACE ENGINEERED ·
+                    </textPath>
+                  </text>
+                </svg>
+                <span class="stamp__core">R//01</span>
+              </div>
+              <div class="metric reveal">
+                <span class="metric__label">PLATE GEOMETRY</span>
+                <span class="metric__value">FULL<span>CARBON</span></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== CHAPTER 04 — RACE DAY ===== -->
+        <section class="chapter chapter--raceday" id="chapter-raceday">
+          <span class="chapter__ghost">04</span>
+          <div class="chapter__grid chapter__grid--raceday">
+            <div class="chapter__col chapter__col--left reveal-group">
+              <span class="chapter__kicker">CHAPTER 04 — RACE DAY</span>
+              <h2 class="chapter__title chapter__title--big reveal">
+                YOU.<br />THE ROAD.<br />NOTHING<br />ELSE.
+              </h2>
+              <p class="chapter__body reveal">
+                No noise. No excuses. Just you and the distance — carried by a
+                system engineered to disappear beneath your stride.
+              </p>
+              <div class="distances reveal" aria-hidden="true">
+                <span class="badge">5K</span>
+                <span class="badge">10K</span>
+                <span class="badge">HALF</span>
+                <span class="badge badge--hot">MARATHON</span>
+              </div>
+            </div>
+
+            <div class="chapter__col chapter__col--right reveal-group">
+              <div class="datacards">
+                <div class="card card--data reveal">
+                  <span class="card__label">WEIGHT</span>
+                  <span class="card__value card__value--xl">218<span>G</span></span>
+                </div>
+                <div class="card card--data reveal">
+                  <span class="card__label">HEEL-TO-TOE DROP</span>
+                  <span class="card__value card__value--xl">8<span>MM</span></span>
+                </div>
+                <div class="card card--data reveal">
+                  <span class="card__label">RACE DISTANCE</span>
+                  <span class="card__value">5K — MARATHON</span>
+                </div>
+                <div class="card card--data reveal">
+                  <span class="card__label">PROPULSION</span>
+                  <span class="card__value">CARBON SYSTEM</span>
+                </div>
+                <div class="card card--data card--wide reveal">
+                  <span class="card__label">ENERGY RETURN</span>
+                  <span class="card__value">MAXIMUM</span>
+                </div>
+              </div>
+
+              <div class="final-cta reveal">
+                <h3>OWN RACE DAY.</h3>
+                <a href="#" class="btn btn--solid btn--lg">SHOP THE RACE SYSTEM</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ---------- FOOTER ---------- -->
+      <footer class="footer" id="footer">
+        <div class="footer__marquee" aria-hidden="true">
+          <div class="footer__track">
+            <span>BUILT FOR SPEED</span><span class="ticker__dot">✦</span>
+            <span>ENGINEERED TO FLY</span><span class="ticker__dot">✦</span>
+            <span>ELITE RACE-DAY PERFORMANCE</span><span class="ticker__dot">✦</span>
+            <span>BUILT FOR SPEED</span><span class="ticker__dot">✦</span>
+            <span>ENGINEERED TO FLY</span><span class="ticker__dot">✦</span>
+            <span>ELITE RACE-DAY PERFORMANCE</span><span class="ticker__dot">✦</span>
+          </div>
+        </div>
+        <div class="footer__grid">
+          <div class="footer__brand">
+            <span class="header__mark">RUN//01</span>
+            <p>PERFORMANCE LAB — AN INTERACTIVE RACING SYSTEM EXPERIENCE.</p>
+          </div>
+          <div class="footer__cols">
+            <div>
+              <span class="footer__h">SYSTEM</span>
+              <a href="#chapter-speed">Speed</a>
+              <a href="#chapter-energy">Energy</a>
+              <a href="#chapter-engineering">Engineering</a>
+            </div>
+            <div>
+              <span class="footer__h">RACE</span>
+              <a href="#chapter-raceday">Race Day</a>
+              <a href="#chapter-raceday">Specs</a>
+              <a href="#chapter-raceday">Shop</a>
+            </div>
+          </div>
+          <div class="footer__end">
+            <span class="footer__mono">© 2026 VELOCITY RACE SYSTEM</span>
+            <span class="footer__mono">LAT 40.7128 · LON -74.0060</span>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
