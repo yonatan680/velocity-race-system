@@ -86,7 +86,8 @@ const scene = new ShoeScene({
   onLoaded: (shoe) => onShoeReady(shoe),
 });
 
-scene.load('/models/shoe.glb');
+const MODEL_URL = `${import.meta.env.BASE_URL}models/shoe.glb`;
+scene.load(MODEL_URL);
 
 scene.setScrollDriver((root, dt) => {
   tickScrollAnimation(root, dt, { reducedMotion: REDUCED });
@@ -97,7 +98,13 @@ scene.setScrollDriver((root, dt) => {
 /* -------------------------------------------------------------------------- */
 let built = false;
 
-function onShoeReady() {
+function onShoeReady(shoe) {
+  if (!shoe) {
+    loaderStat.textContent = 'RETRYING 3D MODEL';
+    gsap.delayedCall(1.2, () => scene.load(MODEL_URL));
+    return;
+  }
+
   hideLoader();
 
   const start = () => {
@@ -292,14 +299,9 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
   });
 });
 
-/* Safety: if GLB is slow or fails, never trap the user behind the loader. */
-gsap.delayedCall(20, () => {
+/* The shoe GLB is ~122MB — keep the loader until it actually arrives. */
+gsap.delayedCall(180, () => {
   if (!loaderEl.classList.contains('is-hidden')) {
-    hideLoader();
-    if (!built) {
-      buildTimelines();
-      built = true;
-      ScrollTrigger.refresh();
-    }
+    loaderStat.textContent = 'STILL LOADING MODEL';
   }
 });

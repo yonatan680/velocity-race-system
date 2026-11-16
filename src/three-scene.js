@@ -128,6 +128,7 @@ export class ShoeScene {
   /* ---------------------------------------------------------- load model */
   load(url) {
     const loader = new GLTFLoader();
+    loader.setCrossOrigin('anonymous');
     loader.load(
       url,
       (gltf) => this._onModelLoaded(gltf),
