@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 import { ShoeScene } from './three-scene.js';
+import { setScrollOrigin, resetScrollAnimation } from './scroll-animation.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,21 +24,23 @@ document.documentElement.classList.add('js-loading');
 /* -------------------------------------------------------------------------- */
 /*  Lenis smooth scroll                                                       */
 /* -------------------------------------------------------------------------- */
-let lenis = null;
-if (!REDUCED) {
-  lenis = new Lenis({
-    lerp: 0.16,
-    wheelMultiplier: 1.08,
-    touchMultiplier: 1,
-    smoothWheel: true,
-  });
+const lenis = new Lenis({
+  lerp: REDUCED ? 1 : 0.16,
+  wheelMultiplier: 1.08,
+  touchMultiplier: 1,
+  smoothWheel: !REDUCED,
+  autoRaf: false,
+  respectReducedMotion: false,
+});
 
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
-  gsap.ticker.lagSmoothing(0);
-}
+lenis.on('scroll', ScrollTrigger.update);
+
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+gsap.ticker.lagSmoothing(0);
+
+ScrollTrigger.addEventListener('refresh', () => lenis.resize());
 
 window.lenis = lenis;
 
@@ -104,17 +107,26 @@ function computeHeroPlacement() {
   const targetFrac = isMobile ? 0.72 : 0.52;
   const desiredWorldWidth = worldW * targetFrac;
   heroState.scale = desiredWorldWidth / 3.4;
-  heroState.worldX = worldW * (isMobile ? 0.12 : 0.38);
+  heroState.worldX = 0;
   heroState.worldY = 0;
 }
 
 function applyHeroPlacement() {
   computeHeroPlacement();
-  scene.shoeRoot.position.set(heroState.worldX, heroState.worldY, 0);
-  scene.shoeRoot.scale.setScalar(heroState.scale);
-  scene.shoeRoot.rotation.set(0.08, -0.15, -0.04);
   scene.shoePivot.position.set(0, 0, 0);
+  setScrollOrigin({
+    x: heroState.worldX,
+    y: heroState.worldY,
+    z: 0,
+    rx: 0.08,
+    ry: -0.15,
+    rz: -0.04,
+    scale: heroState.scale,
+  });
+  resetScrollAnimation();
 }
+
+applyHeroPlacement();
 
 /* -------------------------------------------------------------------------- */
 /*  When the shoe is ready                                                    */
@@ -134,6 +146,7 @@ function onShoeReady(shoe) {
     return;
   }
 
+  applyHeroPlacement();
   hideLoader();
 
   const start = () => {
@@ -142,7 +155,10 @@ function onShoeReady(shoe) {
       buildTimelines();
       built = true;
     }
-    ScrollTrigger.refresh();
+    requestAnimationFrame(() => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    });
   };
 
   if (document.fonts && document.fonts.ready) {
@@ -157,125 +173,39 @@ function onShoeReady(shoe) {
 /* -------------------------------------------------------------------------- */
 function buildTimelines() {
   buildEditorialReveals();
-
-  if (REDUCED) {
-    return;
-  }
-
   buildHeroPin();
-  buildProductStory();
   buildSpeedMoment();
   buildParallax();
   buildStoryZ();
 
-  ScrollTrigger.addEventListener('refreshInit', () => computeHeroPlacement());
+  ScrollTrigger.addEventListener('refreshInit', () => {
+    computeHeroPlacement();
+    setScrollOrigin({
+      x: heroState.worldX,
+      y: heroState.worldY,
+      z: 0,
+      rx: 0.08,
+      ry: -0.15,
+      rz: -0.04,
+      scale: heroState.scale,
+    });
+  });
 }
 
-/* --------- HERO PIN: cinematic product rotation --------------------------- */
+/* Extra scroll room in the hero so the 3D clip has time to start. */
 function buildHeroPin() {
-  const worldH = scene.worldHeightAtZ0();
-  const centerY = 0;
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: '.hero',
-      start: 'top top',
-      end: '+=1400',
-      scrub: true,
-      pin: true,
-      pinSpacing: true,
-    },
-  });
-
-  const rootPos = scene.shoeRoot.position;
-  const rootRot = scene.shoeRoot.rotation;
-  const rootScale = scene.shoeRoot.scale;
-  const s = (mult) => heroState.scale * mult;
-
-  tl.to(rootPos, { x: heroState.worldX, y: centerY + worldH * 0.02, duration: 0.3, ease: 'power1.inOut' }, 0)
-    .to(rootRot, { x: -0.18, y: 0.55, z: -0.02, duration: 0.3, ease: 'power1.inOut' }, 0)
-    .to(rootScale, { x: s(1.12), y: s(1.12), z: s(1.12), duration: 0.3, ease: 'power1.inOut' }, 0);
-
-  tl.to(rootPos, { y: centerY - worldH * 0.05, duration: 0.25, ease: 'power1.inOut' }, 0.3)
-    .to(rootRot, { x: 0.75, y: 1.0, z: 0.0, duration: 0.25, ease: 'power1.inOut' }, 0.3);
-
-  tl.to(rootPos, { y: centerY, duration: 0.2, ease: 'power1.inOut' }, 0.55)
-    .to(rootRot, { x: 0.12, y: -0.35, z: 0.03, duration: 0.2, ease: 'power1.inOut' }, 0.55);
-
-  tl.to(rootPos, { x: heroState.worldX, y: centerY - worldH * 0.01, duration: 0.25, ease: 'power2.inOut' }, 0.75)
-    .to(rootRot, { x: 0.1, y: -0.32, z: 0.02, duration: 0.25, ease: 'power2.inOut' }, 0.75)
-    .to(rootScale, { x: s(0.98), y: s(0.98), z: s(0.98), duration: 0.25, ease: 'power2.inOut' }, 0.75);
-}
-
-/* --------- PRODUCT STORY: turntable + Y drift ----------------------------- */
-function buildProductStory() {
-  gsap.fromTo(
-    scene.shoePivot.position,
-    { y: 0 },
-    {
-      y: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.product-story',
-        start: 'top bottom',
-        end: 'top 20%',
-        scrub: true,
-      },
-    }
-  );
-
-  gsap.to(scene.shoeRoot.rotation, {
-    y: '+=' + Math.PI * 2,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '.product-story',
-      start: 'top 55%',
-      end: 'bottom top',
-      scrub: true,
-    },
+  ScrollTrigger.create({
+    trigger: '.hero',
+    start: 'top top',
+    end: '+=1400',
+    pin: true,
+    pinSpacing: true,
+    anticipatePin: 1,
   });
 }
 
-/* --------- SPEED MOMENT: L->R acceleration then settle -------------------- */
+/* --------- SPEED MOMENT: HTML streaks (shoe motion lives on the clip) --- */
 function buildSpeedMoment() {
-  const worldH = scene.worldHeightAtZ0();
-  const worldW = worldH * scene.camera.aspect;
-  const dash = worldW * 0.34;
-
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: '#speedMoment',
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 0.6,
-    },
-  })
-    .fromTo(scene.shoePivot.position, { x: -dash }, { x: dash, duration: 0.5, ease: 'power3.in' }, 0)
-    .to(scene.shoePivot.position, { x: 0, duration: 0.5, ease: 'power3.out' }, 0.5)
-    .fromTo(
-      scene.shoeRoot.scale,
-      { x: heroState.scale * 0.98, y: heroState.scale * 0.98, z: heroState.scale * 0.98 },
-      {
-        x: heroState.scale * 1.1,
-        y: heroState.scale * 1.1,
-        z: heroState.scale * 1.1,
-        duration: 0.5,
-        ease: 'power2.in',
-      },
-      0
-    )
-    .to(
-      scene.shoeRoot.scale,
-      {
-        x: heroState.scale * 0.98,
-        y: heroState.scale * 0.98,
-        z: heroState.scale * 0.98,
-        duration: 0.5,
-        ease: 'power2.out',
-      },
-      0.5
-    );
-
   const streaks = gsap.utils.toArray('.speed-moment__streaks span');
   gsap.timeline({
     scrollTrigger: {
@@ -415,7 +345,7 @@ let resizeRAF = null;
 window.addEventListener('resize', () => {
   if (resizeRAF) cancelAnimationFrame(resizeRAF);
   resizeRAF = requestAnimationFrame(() => {
-    computeHeroPlacement();
+    applyHeroPlacement();
     ScrollTrigger.refresh();
   });
 });

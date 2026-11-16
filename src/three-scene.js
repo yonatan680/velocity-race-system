@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { tickScrollAnimation } from './scroll-animation.js';
 
 /**
  * Premium studio 3D scene for the racing shoe.
@@ -268,7 +269,10 @@ export class ShoeScene {
   /* ---------------------------------------------------------------- loop */
   _animate() {
     this._raf = requestAnimationFrame(this._animate);
-    const t = this.clock.getElapsedTime();
+    const dt = this.clock.getDelta();
+    const t = this.clock.elapsedTime;
+
+    tickScrollAnimation(this.shoeRoot, dt, { reducedMotion: false });
 
     if (this._ready && this.shoe && !this.reducedMotion) {
       this.idle.y = Math.sin(t * (Math.PI / 1.8)) * 0.045;

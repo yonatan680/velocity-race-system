@@ -181,6 +181,30 @@ const restPos = _pos.clone();
 const restQuat = _quat.clone();
 const restScale = _scale.clone();
 
+const originPos = new THREE.Vector3();
+const originQuat = new THREE.Quaternion();
+const _qDelta = new THREE.Quaternion();
+const _targetPos = new THREE.Vector3();
+const _targetQuat = new THREE.Quaternion();
+const _targetScale = new THREE.Vector3();
+let originScale = 1;
+let originReady = false;
+
+function applyOrigin(pos, quat, scaleVec, outPos, outQuat, outScale) {
+  outPos.copy(originPos).add(pos).sub(restPos);
+  _qDelta.copy(restQuat).invert().multiply(quat);
+  outQuat.copy(originQuat).multiply(_qDelta);
+  const s = originScale * (scaleVec.x / (restScale.x || 1));
+  outScale.set(s, s, s);
+}
+
+export function setScrollOrigin({ x, y, z = 0, rx, ry, rz, scale }) {
+  originPos.set(x, y, z);
+  originQuat.setFromEuler(new THREE.Euler(rx, ry, rz, 'XYZ'));
+  originScale = scale;
+  originReady = true;
+}
+
 export function getScrollPct() {
   const max = document.documentElement.scrollHeight - window.innerHeight;
   if (max <= 0) return 0;
@@ -196,12 +220,13 @@ let playhead = 0;
 const playheadVel = { value: 0 };
 
 export function tickScrollAnimation(model, dt, { reducedMotion } = {}) {
-  if (!model) return;
+  if (!model || !originReady) return;
 
   if (reducedMotion) {
-    model.position.copy(restPos);
-    model.quaternion.copy(restQuat);
-    model.scale.copy(restScale);
+    applyOrigin(restPos, restQuat, restScale, _targetPos, _targetQuat, _targetScale);
+    model.position.copy(_targetPos);
+    model.quaternion.copy(_targetQuat);
+    model.scale.copy(_targetScale);
     return;
   }
 
@@ -212,20 +237,22 @@ export function tickScrollAnimation(model, dt, { reducedMotion } = {}) {
     playhead = targetPct;
     playheadVel.value = 0;
     sampleLut(lut, playhead, _pos, _quat, _scale);
-    model.position.copy(_pos);
-    model.quaternion.copy(_quat);
-    model.scale.copy(_scale);
+    applyOrigin(_pos, _quat, _scale, _targetPos, _targetQuat, _targetScale);
+    model.position.copy(_targetPos);
+    model.quaternion.copy(_targetQuat);
+    model.scale.copy(_targetScale);
     snapped = true;
     return;
   }
 
   playhead = smoothDamp(playhead, targetPct, playheadVel, PLAYHEAD_SMOOTH, step);
   sampleLut(lut, playhead, _pos, _quat, _scale);
+  applyOrigin(_pos, _quat, _scale, _targetPos, _targetQuat, _targetScale);
 
   const follow = 1 - Math.exp(-POSE_FOLLOW * step);
-  model.position.lerp(_pos, follow);
-  model.quaternion.slerp(_quat, follow);
-  model.scale.lerp(_scale, follow);
+  model.position.lerp(_targetPos, follow);
+  model.quaternion.slerp(_targetQuat, follow);
+  model.scale.lerp(_targetScale, follow);
 }
 
 export function resetScrollAnimation() {
