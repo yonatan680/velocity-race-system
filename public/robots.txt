@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yonatan680.github.io/velocity-race-system/sitemap.xml

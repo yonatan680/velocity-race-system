@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 /**
@@ -25,7 +24,6 @@ export class ShoeScene {
     this.clock = new THREE.Clock();
     this._raf = null;
     this._ready = false;
-    this._scrollDriver = null;
 
     // idle motion accumulators (kept separate & additive)
     this.idle = { y: 0, z: 0 };
@@ -130,7 +128,6 @@ export class ShoeScene {
   load(url) {
     const loader = new GLTFLoader();
     loader.setCrossOrigin('anonymous');
-    loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(
       url,
       (gltf) => this._onModelLoaded(gltf),
@@ -268,24 +265,14 @@ export class ShoeScene {
     this._setSize();
   }
 
-  setScrollDriver(fn) {
-    this._scrollDriver = fn;
-  }
-
   /* ---------------------------------------------------------------- loop */
   _animate() {
     this._raf = requestAnimationFrame(this._animate);
-    const dt = Math.min(this.clock.getDelta(), 0.05);
-    const t = this.clock.elapsedTime;
-
-    if (this._scrollDriver && this.shoeRoot) {
-      this._scrollDriver(this.shoeRoot, dt);
-    }
+    const t = this.clock.getElapsedTime();
 
     if (this._ready && this.shoe && !this.reducedMotion) {
-      // idle floating + breathing — additive on the mesh, independent of scroll
-      this.idle.y = Math.sin(t * (Math.PI / 1.8)) * 0.028;
-      this.idle.z = Math.sin(t * 0.6) * 0.01;
+      this.idle.y = Math.sin(t * (Math.PI / 1.8)) * 0.045;
+      this.idle.z = Math.sin(t * 0.6) * 0.015;
       this.shoe.position.y = this._shoeBaseY + this.idle.y;
       this.shoe.rotation.z = this.idle.z;
     }
