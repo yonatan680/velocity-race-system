@@ -299,8 +299,7 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
   });
 });
 
-/* The shoe GLB is ~122MB — keep the loader until it actually arrives. */
-gsap.delayedCall(180, () => {
+gsap.delayedCall(20, () => {
   if (!loaderEl.classList.contains('is-hidden')) {
     loaderStat.textContent = 'STILL LOADING MODEL';
   }

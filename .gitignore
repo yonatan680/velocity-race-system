@@ -5,5 +5,6 @@ dist/
 Thumbs.db
 *.log
 
-# Duplicate source mesh; the site uses public/models/shoe.glb
+# Duplicate / uncompressed source meshes; the site uses public/models/shoe.glb
 Meshy_AI_Nike_Alphafly_3_Runni_0825204523_texture.glb
+public/models/shoe.original.glb

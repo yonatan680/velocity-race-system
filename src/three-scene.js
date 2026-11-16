@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 /**
@@ -129,6 +130,7 @@ export class ShoeScene {
   load(url) {
     const loader = new GLTFLoader();
     loader.setCrossOrigin('anonymous');
+    loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(
       url,
       (gltf) => this._onModelLoaded(gltf),
@@ -136,8 +138,7 @@ export class ShoeScene {
         if (evt.lengthComputable) {
           this.onProgress(evt.loaded / evt.total);
         } else {
-          // stream without content-length: nudge progress forward
-          this.onProgress(Math.min(0.9, (evt.loaded || 0) / (12 * 1024 * 1024)));
+          this.onProgress(Math.min(0.9, (evt.loaded || 0) / (1.5 * 1024 * 1024)));
         }
       },
       (err) => {
