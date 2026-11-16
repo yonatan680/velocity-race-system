@@ -7,7 +7,7 @@ export default defineConfig({
     host: true,
     port: 5173,
     watch: {
-      ignored: ['**/.tmp-verify/**'],
+      ignored: ['**/.tmp-verify/**', '**/public/models/*.original.glb'],
     },
   },
   build: {
